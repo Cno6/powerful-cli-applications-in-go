@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 )
 
 const (
@@ -38,6 +39,8 @@ func main() {
 	add := flag.Bool("add", false, "Add new to-do item")
 	complete := flag.Int("complete", 0, "Mark the to-do item as completed")
 	delete := flag.Int("del", 0, "Todo item for remove from the list")
+	verbose := flag.Bool("verbose", false, "Verbose output")
+	incomplete := flag.Bool("incomplete", false, "Hide completed tasks")
 
 	flag.Parse()
 
@@ -45,6 +48,10 @@ func main() {
 
 	if os.Getenv(FileNameEnv) != "" {
 		todoFileName = os.Getenv(FileNameEnv)
+	}
+
+	if *verbose {
+		fmt.Println(time.Now())
 	}
 
 	l := &todo.List{}
@@ -56,7 +63,9 @@ func main() {
 
 	switch {
 	case *list:
-		fmt.Print(l)
+		showCompleted := !*incomplete
+
+		fmt.Print(l.String(showCompleted))
 	case *complete != 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)

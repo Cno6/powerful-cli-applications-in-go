@@ -78,10 +78,14 @@ func (l *List) Get(filename string) error {
 	return json.Unmarshal(file, l)
 }
 
-func (l *List) String() string {
+func (l *List) String(showCompleted bool) string {
 	formatted := ""
 
 	for k, t := range *l {
+		if t.Done && !showCompleted {
+			continue
+		}
+
 		prefix := " "
 		if t.Done {
 			prefix = "X"
