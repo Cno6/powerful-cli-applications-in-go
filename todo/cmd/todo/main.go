@@ -35,6 +35,14 @@ func getTask(r io.Reader, args ...string) (string, error) {
 }
 
 func main() {
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "%s tool.\n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2025\n")
+		fmt.Fprintln(flag.CommandLine.Output(), "Usage information:")
+		flag.PrintDefaults()
+		fmt.Fprintln(flag.CommandLine.Output(), "Can use STDIN/arguments input")
+	}
+
 	list := flag.Bool("list", false, "List all to-do items")
 	add := flag.Bool("add", false, "Add new to-do item")
 	complete := flag.Int("complete", 0, "Mark the to-do item as completed")
